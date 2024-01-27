@@ -39,6 +39,23 @@ public class Main
                     System.out.print("[" + secretWord.charAt(i) +"]");
                 }
             }
+            for(int i = 0; i < howManyPlayers; i++){
+                boolean isGuessingFailed = false;
+                while(!isGuessingFailed){
+                    int trueCounter = 0;
+                    System.out.println("Guess the word or letter: ");
+                    String guessingOfPlayer = scanner.nextLine();
+                    for(int j = 0; j < secretWord.length(); j++){
+                        if(guessingOfPlayer.charAt(0) == secretWord.charAt(j)){
+                            charSlots[j] = 1;
+                            trueCounter++;
+                        }
+                    }
+                    if(trueCounter == 0){
+                        isGuessingFailed = true;
+                    }
+                }
+            }
             isGameRunning = false;
         }
     }
