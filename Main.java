@@ -12,6 +12,11 @@ public class Main
         int howManyPlayers = scanner.nextInt();
         scanner.nextLine();
         String[] namesOfPlayers = new String[howManyPlayers];
+        String secretWord = wordChoosed(randomIndexOfWord);     //selected word
+        int[] charSlots = new int[secretWord.length()];   //finded slots true or false
+        for(int i = 0; i < secretWord.length(); i++){
+            charSlots[i] = 0;
+        }
         for (int i = 0; i < howManyPlayers; i++){
             if(namesOfPlayers[i] != " "){
                 System.out.print("Player " + (i + 1) + ": ");
@@ -25,6 +30,14 @@ public class Main
             System.out.println("Hint: " + wordsMeanigsChoosed(randomIndexOfWord));
             for (int i = 0; i < howManyPlayers; i++){
                 System.out.println("Player " + (i + 1) + ": " + namesOfPlayers[i]);
+            }
+            for(int i = 0; i < secretWord.length(); i++){
+                if(charSlots[i] == 0){
+                    System.out.print("[" + "*" +"]");
+                }
+                else{
+                    System.out.print("[" + secretWord.charAt(i) +"]");
+                }
             }
             isGameRunning = false;
         }
