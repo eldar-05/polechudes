@@ -27,6 +27,7 @@ public class Main
         clear();
         while (isGameRunning)
         {
+            clear();
             System.out.println("Hint: " + wordsMeanigsChoosed(randomIndexOfWord));
             for (int i = 0; i < howManyPlayers; i++){
                 System.out.println("Player " + (i + 1) + ": " + namesOfPlayers[i]);
@@ -56,7 +57,15 @@ public class Main
                     }
                 }
             }
-            isGameRunning = false;
+            int sum = 0;
+            for(int i = 0; i < secretWord.length(); i++){
+                if(charSlots[i] == 1){
+                    sum++;
+                }
+            }
+            if(sum == secretWord.length()){
+                isGameRunning = false;
+            }
         }
     }
     public static String wordChoosed (int randomIndexOfWord){
