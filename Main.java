@@ -46,12 +46,26 @@ public class Main
                     else{
                         System.out.print("[" + secretWord.charAt(i) +"]");
                     }
+                }
+                System.out.print("Write letter or word: ");
+                String guessing = scanner.nextLine();
+                if(guessing.length() < 2){
+                    for(int i = 0; i < secretWord.length(); i++){
+                        if(guessing.charAt(0) == secretWord.charAt(i)){
+                            charSlots[i] = 1;
+                            scoresOfPlayers[k] = scoresOfPlayers[k] + 100;
+                        }
                     }
-                    for(int i = 0; i < howManyPlayers; i++){
-                        System.out.print("Write letter or word: ");
-                        String guessing = scanner.nextLine();
-                        if(guessing.charAt(0) == )
+                }
+                else{
+                    if(guessing == secretWord){
+                        for(int i = 0; i < secretWord.length(); i++){
+                            charSlots[i] = 1;
+                        }
+                        scoresOfPlayers[k] = maximumScore;
+                        break;
                     }
+                }
                 //checking that all chars are finded?
                 int sum = 0;
                 for(int i = 0; i < secretWord.length(); i++){
@@ -62,9 +76,14 @@ public class Main
                 if(sum == secretWord.length()){
                     isGameRunning = false;
                     scoresOfPlayers[k] = maximumScore;
+                    break;
                 }
             }
-            isGameRunning = false;
+        }
+        for(int i = 0; i < howManyPlayers; i++){
+            if(scoresOfPlayers[i] == maximumScore){
+                System.out.print(namesOfPlayers[i] + " is winner");
+            }
         }
     }
     public static String wordChoosed (int randomIndexOfWord){
