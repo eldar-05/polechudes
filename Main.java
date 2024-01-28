@@ -62,7 +62,7 @@ public class Main
                     }
                 }
                 else{
-                    if(guessing == secretWord){
+                    if(guessing.equals(secretWord)){
                         for(int i = 0; i < secretWord.length(); i++){
                             charSlots[i] = 1;
                         }
