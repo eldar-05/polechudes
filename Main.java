@@ -33,9 +33,8 @@ public class Main
         clear();
         while (isGameRunning)
         {
-            clear();
-            boolean isNewCercleStarted = true;
-            while(isNewCercleStarted){
+            for(int k = 0; k < howManyPlayers; k++){
+                clear();
                 System.out.println("Hint: " + wordsMeanigsChoosed(randomIndexOfWord));
                 for (int i = 0; i < howManyPlayers; i++){
                     System.out.println("Player " + (i + 1) + ": " + namesOfPlayers[i] + " " + scoresOfPlayers[i] + " points");
@@ -47,7 +46,12 @@ public class Main
                     else{
                         System.out.print("[" + secretWord.charAt(i) +"]");
                     }
-                }
+                    }
+                    for(int i = 0; i < howManyPlayers; i++){
+                        System.out.print("Write letter or word: ");
+                        String guessing = scanner.nextLine();
+                        if(guessing.charAt(0) == )
+                    }
                 //checking that all chars are finded?
                 int sum = 0;
                 for(int i = 0; i < secretWord.length(); i++){
@@ -57,6 +61,7 @@ public class Main
                 }
                 if(sum == secretWord.length()){
                     isGameRunning = false;
+                    scoresOfPlayers[k] = maximumScore;
                 }
             }
             isGameRunning = false;
