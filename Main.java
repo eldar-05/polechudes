@@ -10,62 +10,56 @@ public class Main
         int randomIndexOfWord = random.nextInt(10);
         System.out.print("How many players? 2,3,4... ");
         int howManyPlayers = scanner.nextInt();
-        scanner.nextLine();
         String[] namesOfPlayers = new String[howManyPlayers];
+        int[] scoresOfPlayers = new int[howManyPlayers];   //score data
         String secretWord = wordChoosed(randomIndexOfWord);     //selected word
         int[] charSlots = new int[secretWord.length()];   //finded slots true or false
         for(int i = 0; i < secretWord.length(); i++){
             charSlots[i] = 0;
         }
+        scanner.nextLine();
         for (int i = 0; i < howManyPlayers; i++){
-            if(namesOfPlayers[i] != " "){
-                System.out.print("Player " + (i + 1) + ": ");
-                namesOfPlayers[i] = scanner.nextLine();
-            }
+            scoresOfPlayers[i] = 0;
+            System.out.print("Player " + (i + 1) + ": ");
+            namesOfPlayers[i] = scanner.nextLine();
         }
+        for (int i = 0; i < namesOfPlayers.length; i++) {          //randomly shufling the numeration of players
+			int randomIndexToSwap = random.nextInt(namesOfPlayers.length);
+			String temp = namesOfPlayers[randomIndexToSwap];
+			namesOfPlayers[randomIndexToSwap] = namesOfPlayers[i];
+			namesOfPlayers[i] = temp;
+		}
         int maximumScore = getMaxPossibleScore(wordChoosed(randomIndexOfWord));  //max score calculator
         clear();
         while (isGameRunning)
         {
             clear();
-            System.out.println("Hint: " + wordsMeanigsChoosed(randomIndexOfWord));
-            for (int i = 0; i < howManyPlayers; i++){
-                System.out.println("Player " + (i + 1) + ": " + namesOfPlayers[i]);
-            }
-            for(int i = 0; i < secretWord.length(); i++){
-                if(charSlots[i] == 0){
-                    System.out.print("[" + "*" +"]");
+            boolean isNewCercleStarted = true;
+            while(isNewCercleStarted){
+                System.out.println("Hint: " + wordsMeanigsChoosed(randomIndexOfWord));
+                for (int i = 0; i < howManyPlayers; i++){
+                    System.out.println("Player " + (i + 1) + ": " + namesOfPlayers[i] + " " + scoresOfPlayers[i] + " points");
                 }
-                else{
-                    System.out.print("[" + secretWord.charAt(i) +"]");
-                }
-            }
-            for(int i = 0; i < howManyPlayers; i++){
-                boolean isGuessingFailed = false;
-                while(!isGuessingFailed){
-                    int trueCounter = 0;
-                    System.out.println("Guess the word or letter: ");
-                    String guessingOfPlayer = scanner.nextLine();
-                    for(int j = 0; j < secretWord.length(); j++){
-                        if(guessingOfPlayer.charAt(0) == secretWord.charAt(j)){
-                            charSlots[j] = 1;
-                            trueCounter++;
-                        }
+                for(int i = 0; i < secretWord.length(); i++){
+                    if(charSlots[i] == 0){
+                        System.out.print("[" + "*" +"]");
                     }
-                    if(trueCounter == 0){
-                        isGuessingFailed = true;
+                    else{
+                        System.out.print("[" + secretWord.charAt(i) +"]");
                     }
                 }
-            }
-            int sum = 0;
-            for(int i = 0; i < secretWord.length(); i++){
-                if(charSlots[i] == 1){
-                    sum++;
+                //checking that all chars are finded?
+                int sum = 0;
+                for(int i = 0; i < secretWord.length(); i++){
+                    if(charSlots[i] == 1){
+                        sum++;
+                    }
+                }
+                if(sum == secretWord.length()){
+                    isGameRunning = false;
                 }
             }
-            if(sum == secretWord.length()){
-                isGameRunning = false;
-            }
+            isGameRunning = false;
         }
     }
     public static String wordChoosed (int randomIndexOfWord){
