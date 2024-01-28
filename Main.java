@@ -47,14 +47,18 @@ public class Main
                         System.out.print("[" + secretWord.charAt(i) +"]");
                     }
                 }
-                System.out.print("Write letter or word: ");
+                System.out.println("Write letter or word: ");
                 String guessing = scanner.nextLine();
-                if(guessing.length() < 2){
+                if(guessing.length() == 1){
+                    boolean giveScore = false;
                     for(int i = 0; i < secretWord.length(); i++){
-                        if(guessing.charAt(0) == secretWord.charAt(i)){
+                        if(guessing.charAt(0) == secretWord.charAt(i) && charSlots[i] == 0){
                             charSlots[i] = 1;
-                            scoresOfPlayers[k] = scoresOfPlayers[k] + 100;
+                            giveScore = true;
                         }
+                    }
+                    if(giveScore){
+                        scoresOfPlayers[k] = scoresOfPlayers[k] + 100;
                     }
                 }
                 else{
@@ -63,6 +67,7 @@ public class Main
                             charSlots[i] = 1;
                         }
                         scoresOfPlayers[k] = maximumScore;
+                        isGameRunning = false;
                         break;
                     }
                 }
@@ -82,7 +87,7 @@ public class Main
         }
         for(int i = 0; i < howManyPlayers; i++){
             if(scoresOfPlayers[i] == maximumScore){
-                System.out.print(namesOfPlayers[i] + " is winner");
+                System.out.println(namesOfPlayers[i] + " is winner " + maximumScore);
             }
         }
     }
