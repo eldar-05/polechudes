@@ -10,6 +10,7 @@ public class Main
         int randomIndexOfWord = random.nextInt(10);
         System.out.print("How many players? 2,3,4... ");
         int howManyPlayers = scanner.nextInt();
+        int winnerNumber = 0;
         String[] namesOfPlayers = new String[howManyPlayers];
         int[] scoresOfPlayers = new int[howManyPlayers];   //score data
         String secretWord = wordChoosed(randomIndexOfWord);     //selected word
@@ -31,13 +32,17 @@ public class Main
 		}
         int maximumScore = getMaxPossibleScore(wordChoosed(randomIndexOfWord));  //max score calculator
         clear();
-        while (isGameRunning)
-        {
+        while (isGameRunning){
             for(int k = 0; k < howManyPlayers; k++){
                 clear();
+                if(scoresOfPlayers[k] == -1){
+                    continue;
+                }
                 System.out.println("Hint: " + wordsMeanigsChoosed(randomIndexOfWord));
                 for (int i = 0; i < howManyPlayers; i++){
-                    System.out.println("Player " + (i + 1) + ": " + namesOfPlayers[i] + " " + scoresOfPlayers[i] + " points");
+                    if(scoresOfPlayers[i] > -1){
+                        System.out.println("Player " + ": " + namesOfPlayers[i] + " " + scoresOfPlayers[i] + " points");
+                    }
                 }
                 for(int i = 0; i < secretWord.length(); i++){
                     if(charSlots[i] == 0){
@@ -47,7 +52,8 @@ public class Main
                         System.out.print("[" + secretWord.charAt(i) +"]");
                     }
                 }
-                System.out.println("Write letter or word: ");
+                System.out.println( "\n"+ namesOfPlayers[k] + " is guessing...");
+                System.out.print("Write letter or word: ");
                 String guessing = scanner.nextLine();
                 if(guessing.length() == 1){
                     boolean giveScore = false;
@@ -59,6 +65,7 @@ public class Main
                     }
                     if(giveScore){
                         scoresOfPlayers[k] = scoresOfPlayers[k] + 100;
+                        k--;
                     }
                 }
                 else{
@@ -69,6 +76,9 @@ public class Main
                         scoresOfPlayers[k] = maximumScore;
                         isGameRunning = false;
                         break;
+                    }
+                    else{
+                        scoresOfPlayers[k] = -1;
                     }
                 }
                 //checking that all chars are finded?
@@ -85,6 +95,7 @@ public class Main
                 }
             }
         }
+        clear();
         for(int i = 0; i < howManyPlayers; i++){
             if(scoresOfPlayers[i] == maximumScore){
                 System.out.println(namesOfPlayers[i] + " is winner " + maximumScore);
