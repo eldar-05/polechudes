@@ -61,7 +61,8 @@ public class Main {
                 for (int i = 0; i < secretWord.length(); i++) {
                     if (charSlots[i] == 0) {
                         System.out.print("[*]");
-                    } else {
+                    }
+                    else {
                         System.out.print("[" + secretWord.charAt(i) + "]");
                     }
                 }
@@ -95,7 +96,8 @@ public class Main {
                         isGameActive = false;
                         break;
                     }
-                } else {
+                }
+                else {
                     if (guessing.equals(secretWord)) {
                         for (int i = 0; i < secretWord.length(); i++) {
                             charSlots[i] = 1;
@@ -103,7 +105,8 @@ public class Main {
                         playerScores[currentPlayerIndex] = maxPossibleScore;
                         isGameActive = false;
                         break;
-                    } else {
+                    }
+                    else {
                         playerScores[currentPlayerIndex] = -1;
                         int failedPlayers = 0;
                         int num = -1;
@@ -131,7 +134,8 @@ public class Main {
                     for (int j = 0; j < secretWord.length(); j++) {
                         if (charSlots[j] == 0) {
                             System.out.print("[*]");
-                        } else {
+                        }
+                        else {
                             System.out.print("[" + secretWord.charAt(j) + "]");
                         }
                     }
@@ -141,7 +145,8 @@ public class Main {
                         playerScores[i] = maxPossibleScore;
                         winnerName = playerNames[i];
                         break;
-                    } else {
+                    }
+                    else {
                         playerScores[i] = -1;
                     }
                     clear();
