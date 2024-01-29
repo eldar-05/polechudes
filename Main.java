@@ -34,20 +34,7 @@ public class Main
         int maximumScore = getMaxPossibleScore(wordChoosed(randomIndexOfWord));  //max score calculator
         clear();
         while (isGameRunning){
-            int countingFailedPlayers = 0;
-            int lastPlayer = -1;
             for(int k = 0; k < howManyPlayers; k++){
-                for(int i = 0; i < howManyPlayers; i++){
-                    if(scoresOfPlayers[i] == -1){
-                        countingFailedPlayers++;
-                    }
-                    else{
-                        lastPlayer = i;
-                    }
-                }
-                if(countingFailedPlayers == howManyPlayers - 2){
-                    break;
-                }
                 clear();
                 if(scoresOfPlayers[k] == -1){
                     continue;
@@ -104,14 +91,23 @@ public class Main
                     }
                     else{
                         scoresOfPlayers[k] = -1;
+                        int failedPlayers = 0;
+                        int num = -1;
+                        for(int i = 0; i < howManyPlayers; i++){
+                            if(scoresOfPlayers[i] == -1){
+                                failedPlayers++;
+                            }
+                            else{
+                                num = i;
+                            }
+                        }
+                        if(failedPlayers >= howManyPlayers - 1){
+                            winnerName = namesOfPlayers[num];
+                            isGameRunning = false;
+                            break;
+                        }
                     }
                 }
-            }
-            if(countingFailedPlayers == howManyPlayers - 1){
-                winnerName = namesOfPlayers[lastPlayer];
-                scoresOfPlayers[lastPlayer] = maximumScore;
-                doesFinalGameStart = false;
-                break;
             }
         }
         clear();
