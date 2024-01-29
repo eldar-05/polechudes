@@ -1,125 +1,122 @@
 import java.util.Scanner;
 import java.util.Random;
-public class Main
-{
-    public static void main (String[]args)
-    {
-        Scanner scanner = new Scanner(System.in);
-        Random random = new Random();
-        boolean isGameRunning = true;
-        boolean doesFinalGameStart = false;
-        int randomIndexOfWord = random.nextInt(10);
-        System.out.print("How many players? 2,3,4... ");
-        int howManyPlayers = scanner.nextInt();
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner inputScanner = new Scanner(System.in);
+        Random randomGenerator = new Random();
+        boolean isGameActive = true;
+        boolean isFinalGameStarted = false;
+        int randomWordIndex = randomGenerator.nextInt(10);
+        System.out.print("How many players? 2, 3, 4... ");
+        int numberOfPlayers = inputScanner.nextInt();
         String winnerName = "";
-        String[] namesOfPlayers = new String[howManyPlayers];
-        int[] scoresOfPlayers = new int[howManyPlayers];   //score data
-        String secretWord = wordChoosed(randomIndexOfWord);     //selected word
-        int[] charSlots = new int[secretWord.length()];   //finded slots true or false
-        for(int i = 0; i < secretWord.length(); i++){
+        String[] playerNames = new String[numberOfPlayers];
+        int[] playerScores = new int[numberOfPlayers];   // Score data
+        String secretWord = chooseWord(randomWordIndex);     // Selected word
+        int[] charSlots = new int[secretWord.length()];   // Found slots (true or false)
+        for (int i = 0; i < secretWord.length(); i++) {
             charSlots[i] = 0;
         }
-        scanner.nextLine();
-        for (int i = 0; i < howManyPlayers; i++){
-            scoresOfPlayers[i] = 0;
+        inputScanner.nextLine();
+        for (int i = 0; i < numberOfPlayers; i++) {
+            playerScores[i] = 0;
             System.out.print("Player " + (i + 1) + ": ");
-            namesOfPlayers[i] = scanner.nextLine();
+            playerNames[i] = inputScanner.nextLine();
         }
-        for (int i = 0; i < namesOfPlayers.length; i++) {          //randomly shufling the numeration of players
-			int randomIndexToSwap = random.nextInt(namesOfPlayers.length);
-			String temp = namesOfPlayers[randomIndexToSwap];
-			namesOfPlayers[randomIndexToSwap] = namesOfPlayers[i];
-			namesOfPlayers[i] = temp;
-		}
-        int maximumScore = getMaxPossibleScore(wordChoosed(randomIndexOfWord));  //max score calculator
+        // Randomly shuffling the numeration of players
+        for (int i = 0; i < playerNames.length; i++) {
+            int randomIndexToSwap = randomGenerator.nextInt(playerNames.length);
+            String temp = playerNames[randomIndexToSwap];
+            playerNames[randomIndexToSwap] = playerNames[i];
+            playerNames[i] = temp;
+        }
+        int maxPossibleScore = getMaxPossibleScore(chooseWord(randomWordIndex));  // Max score calculator
         clear();
-        while (isGameRunning){
-            for(int k = 0; k < howManyPlayers; k++){
-                boolean allCharsFinded = false;
+        while (isGameActive) {
+            for (int currentPlayerIndex = 0; currentPlayerIndex < numberOfPlayers; currentPlayerIndex++) {
+                boolean allCharsFound = false;
                 clear();
-                if(scoresOfPlayers[k] == -1){
+                if (playerScores[currentPlayerIndex] == -1) {
                     continue;
                 }
-                for(int i = 0; i < howManyPlayers; i++){
-                    if(scoresOfPlayers[i] > maximumScore / 2){
-                        doesFinalGameStart = true;
-                        winnerName = namesOfPlayers[k];
+                for (int i = 0; i < numberOfPlayers; i++) {
+                    if (playerScores[i] > maxPossibleScore / 2) {
+                        isFinalGameStarted = true;
+                        winnerName = playerNames[currentPlayerIndex];
                         break;
                     }
                 }
-                if(doesFinalGameStart){
+                if (isFinalGameStarted) {
+                    isGameActive = false;
                     break;
                 }
-                System.out.println("Hint: " + wordsMeanigsChoosed(randomIndexOfWord));
-                for (int i = 0; i < howManyPlayers; i++){
-                    if(scoresOfPlayers[i] > -1){
-                        System.out.println("Player " + ": " + namesOfPlayers[i] + " " + scoresOfPlayers[i] + " points");
+                System.out.println("Hint: " + chooseWordMeaning(randomWordIndex));
+                for (int i = 0; i < numberOfPlayers; i++) {
+                    if (playerScores[i] > -1) {
+                        System.out.println("Player: " + playerNames[i] + " " + playerScores[i] + " points");
                     }
                 }
                 System.out.println();
-                for(int i = 0; i < secretWord.length(); i++){
-                    if(charSlots[i] == 0){
-                        System.out.print("[" + "*" +"]");
-                    }
-                    else{
-                        System.out.print("[" + secretWord.charAt(i) +"]");
+                for (int i = 0; i < secretWord.length(); i++) {
+                    if (charSlots[i] == 0) {
+                        System.out.print("[*]");
+                    } else {
+                        System.out.print("[" + secretWord.charAt(i) + "]");
                     }
                 }
-                System.out.println( "\n"+ namesOfPlayers[k] + " is guessing...");
+                System.out.println("\n" + playerNames[currentPlayerIndex] + " is guessing...");
                 System.out.print("Write letter or word: ");
-                String guessing = scanner.nextLine();
-                if(guessing.length() == 1){
+                String guessing = inputScanner.nextLine();
+                if (guessing.length() == 1) {
                     boolean giveScore = false;
-                    for(int i = 0; i < secretWord.length(); i++){
-                        if(guessing.charAt(0) == secretWord.charAt(i) && charSlots[i] == 0){
+                    for (int i = 0; i < secretWord.length(); i++) {
+                        if (guessing.charAt(0) == secretWord.charAt(i) && charSlots[i] == 0) {
                             charSlots[i] = 1;
                             giveScore = true;
                         }
                     }
-                    if(giveScore){
-                        scoresOfPlayers[k] = scoresOfPlayers[k] + 100;
-                        k--;
+                    if (giveScore) {
+                        playerScores[currentPlayerIndex] += 100;
+                        currentPlayerIndex--;
                     }
-                    int charsFinded = 0;
-                    for(int i = 0; i < secretWord.length(); i++){
-                        if(charSlots[i] == 1){
-                            charsFinded++;
+                    int charsFound = 0;
+                    for (int i = 0; i < secretWord.length(); i++) {
+                        if (charSlots[i] == 1) {
+                            charsFound++;
                         }
                     }
-                    if(charsFinded >= secretWord.length()){
-                        for(int i = 0; i < howManyPlayers - 1; i++){
-                            if(scoresOfPlayers[i] < scoresOfPlayers[i + 1]){
-                                winnerName = namesOfPlayers[i + 1];
+                    if (charsFound >= secretWord.length()) {
+                        for (int i = 0; i < numberOfPlayers - 1; i++) {
+                            if (playerScores[i] < playerScores[i + 1]) {
+                                winnerName = playerNames[i + 1];
                             }
                         }
-                        isGameRunning = false;
+                        isGameActive = false;
                         break;
                     }
-                }
-                else{
-                    if(guessing.equals(secretWord)){
-                        for(int i = 0; i < secretWord.length(); i++){
+                } else {
+                    if (guessing.equals(secretWord)) {
+                        for (int i = 0; i < secretWord.length(); i++) {
                             charSlots[i] = 1;
                         }
-                        scoresOfPlayers[k] = maximumScore;
-                        isGameRunning = false;
+                        playerScores[currentPlayerIndex] = maxPossibleScore;
+                        isGameActive = false;
                         break;
-                    }
-                    else{
-                        scoresOfPlayers[k] = -1;
+                    } else {
+                        playerScores[currentPlayerIndex] = -1;
                         int failedPlayers = 0;
                         int num = -1;
-                        for(int i = 0; i < howManyPlayers; i++){
-                            if(scoresOfPlayers[i] == -1){
+                        for (int i = 0; i < numberOfPlayers; i++) {
+                            if (playerScores[i] == -1) {
                                 failedPlayers++;
-                            }
-                            else{
+                            } else {
                                 num = i;
                             }
                         }
-                        if(failedPlayers >= howManyPlayers - 1){
-                            winnerName = namesOfPlayers[num];
-                            isGameRunning = false;
+                        if (failedPlayers >= numberOfPlayers - 1) {
+                            winnerName = playerNames[num];
+                            isGameActive = false;
                             break;
                         }
                     }
@@ -127,69 +124,71 @@ public class Main
             }
         }
         clear();
-        if(doesFinalGameStart){     // if some one make more than 50% of maximumScore
-            for(int i = 0; i < howManyPlayers; i++){
-                if(scoresOfPlayers[i] > -1 && !(namesOfPlayers[i]).equals(winnerName)){
-                    System.out.println("Hint: " + wordsMeanigsChoosed(randomIndexOfWord) + " " + winnerName);
-                    for(int j = 0; j < secretWord.length(); j++){
-                        if(charSlots[j] == 0){
-                            System.out.print("[" + "*" +"]");
-                        }
-                        else{
-                        System.out.print("[" + secretWord.charAt(j) +"]");
+        if (isFinalGameStarted) {
+            for (int i = 0; i < numberOfPlayers; i++) {
+                if (playerScores[i] > -1 && !(playerNames[i]).equals(winnerName)) {
+                    System.out.println("Hint: " + chooseWordMeaning(randomWordIndex) + " " + winnerName);
+                    for (int j = 0; j < secretWord.length(); j++) {
+                        if (charSlots[j] == 0) {
+                            System.out.print("[*]");
+                        } else {
+                            System.out.print("[" + secretWord.charAt(j) + "]");
                         }
                     }
-                    System.out.print("\n" + namesOfPlayers[i] + " is guessing full word: ");
-                    String fullWordGuessing = scanner.nextLine();
-                    if(fullWordGuessing.equals(secretWord)){
-                        scoresOfPlayers[i] = maximumScore;
-                        winnerName = namesOfPlayers[i];
+                    System.out.print("\n" + playerNames[i] + " is guessing full word: ");
+                    String fullWordGuessing = inputScanner.nextLine();
+                    if (fullWordGuessing.equals(secretWord)) {
+                        playerScores[i] = maxPossibleScore;
+                        winnerName = playerNames[i];
                         break;
-                    }
-                    else{
-                        scoresOfPlayers[i] = -1;
+                    } else {
+                        playerScores[i] = -1;
                     }
                     clear();
                 }
             }
         }
-        for(int i = 0; i < howManyPlayers; i++){
-            if(scoresOfPlayers[i] == maximumScore || namesOfPlayers[i].equals(winnerName)){
-                for(int j = 0; j < howManyPlayers; j++){
-                    scoresOfPlayers[j] = -1;
+        for (int i = 0; i < numberOfPlayers; i++) {
+            if (playerScores[i] == maxPossibleScore || playerNames[i].equals(winnerName)) {
+                for (int j = 0; j < numberOfPlayers; j++) {
+                    playerScores[j] = -1;
                 }
-                System.out.println(namesOfPlayers[i] + " is winner. Congrats!!!");
+                System.out.println(playerNames[i] + " is the winner. Congrats!!!");
                 System.out.println("The secret word was " + secretWord);
             }
         }
     }
-    public static String wordChoosed (int randomIndexOfWord){
+
+    public static String chooseWord(int randomWordIndex) {
         String[] words = {"gradient", "examination", "infrastructure", "illusion", "recommendation", "government", "establishment", "performance", "opportunity", "temperature"};
-        return words[randomIndexOfWord];
+        return words[randomWordIndex];
     }
-    public static String wordsMeanigsChoosed (int randomIndexOfWord){
-        String[] meaningOfWords = {"A measure of steepness", "Thing that you take to show your knowledge", "the system of public works of a country", "The phenomenon in which the properties of an object or image are different from how they appear", "A suggestion that something is good or suitable for a particular purpose", "Creating and enforcing the rules of a society", "A place of business or residence with its furnishings and staff", "An act or process of staging or presenting a play, concert, or other form of entertainment", "A situation or condition favorable for attainment of a goal", "A measure of the average amount of energy of motion, or kinetic energy, a system contains"};
-        return meaningOfWords[randomIndexOfWord];
+
+    public static String chooseWordMeaning(int randomWordIndex) {
+        String[] wordMeanings = {"A measure of steepness", "Thing that you take to show your knowledge", "the system of public works of a country", "The phenomenon in which the properties of an object or image are different from how they appear", "A suggestion that something is good or suitable for a particular purpose", "Creating and enforcing the rules of a society", "A place of business or residence with its furnishings and staff", "An act or process of staging or presenting a play, concert, or other form of entertainment", "A situation or condition favorable for attainment of a goal", "A measure of the average amount of energy of motion, or kinetic energy, a system contains"};
+        return wordMeanings[randomWordIndex];
     }
-    public static void clear(){
-        System.out.print("\033[H\033[2J"); 
+
+    public static void clear() {
+        System.out.print("\033[H\033[2J");
     }
-    public static int getMaxPossibleScore(String word){ //counting maximumScore
-        int max = 1;
-        String uniq = "" + word.charAt(0);
+
+    public static int getMaxPossibleScore(String word) {
+        int maxScore = 1;
+        String uniqueChars = "" + word.charAt(0);
         for (int i = 1; i < word.length(); i++) {
             boolean found = false;
-            for (int j = 0; j < uniq.length(); j++) {
-                if (word.charAt(i) == uniq.charAt(j)) {
+            for (int j = 0; j < uniqueChars.length(); j++) {
+                if (word.charAt(i) == uniqueChars.charAt(j)) {
                     found = true;
                     break;
                 }
             }
             if (!found) {
-                uniq += word.charAt(i);
-                max++;
+                uniqueChars += word.charAt(i);
+                maxScore++;
             }
         }
-        return max * 100;
+        return maxScore * 100;
     }
 }
