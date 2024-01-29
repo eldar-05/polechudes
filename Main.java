@@ -7,6 +7,8 @@ public class Main
         Scanner scanner = new Scanner(System.in);
         Random random = new Random();
         boolean isGameRunning = true;
+        boolean doesFinalGameStart = false;
+        boolean gameIsFinished = false;
         int randomIndexOfWord = random.nextInt(10);
         System.out.print("How many players? 2,3,4... ");
         int howManyPlayers = scanner.nextInt();
@@ -38,12 +40,23 @@ public class Main
                 if(scoresOfPlayers[k] == -1){
                     continue;
                 }
+                for(int i = 0; i < howManyPlayers; i++){
+                    if(scoresOfPlayers[i] > maximumScore / 2){
+                        doesFinalGameStart = true;
+                        gameIsFinished = true;
+                        winnerNumber = k;
+                    }
+                }
+                if(doesFinalGameStart){
+                    break;
+                }
                 System.out.println("Hint: " + wordsMeanigsChoosed(randomIndexOfWord));
                 for (int i = 0; i < howManyPlayers; i++){
                     if(scoresOfPlayers[i] > -1){
                         System.out.println("Player " + ": " + namesOfPlayers[i] + " " + scoresOfPlayers[i] + " points");
                     }
                 }
+                System.out.println();
                 for(int i = 0; i < secretWord.length(); i++){
                     if(charSlots[i] == 0){
                         System.out.print("[" + "*" +"]");
@@ -81,23 +94,25 @@ public class Main
                         scoresOfPlayers[k] = -1;
                     }
                 }
-                //checking that all chars are finded?
-                int sum = 0;
-                for(int i = 0; i < secretWord.length(); i++){
-                    if(charSlots[i] == 1){
-                        sum++;
-                    }
-                }
-                if(sum == secretWord.length()){
-                    isGameRunning = false;
-                    scoresOfPlayers[k] = maximumScore;
-                    break;
-                }
             }
         }
         clear();
+        scanner.nextLine();
+        if(doesFinalGameStart && gameIsFinished){
+            for(int i = 0; i < howManyPlayers; i++){
+                if(scoresOfPlayers[i] > -1 && scoresOfPlayers[i] != winnerNumber){
+                    System.out.print(namesOfPlayers[i] + " is guessing full word: ");
+                    String fullWordGuessing = scanner.nextLine();
+                    if(fullWordGuessing.equals(secretWord)){
+                        scoresOfPlayers[i] = maximumScore;
+                        winnerNumber = i;
+                        break;
+                    }
+                }
+            }
+        }
         for(int i = 0; i < howManyPlayers; i++){
-            if(scoresOfPlayers[i] == maximumScore){
+            if(scoresOfPlayers[i] == maximumScore && winnerNumber == i){
                 System.out.println(namesOfPlayers[i] + " is winner " + maximumScore);
             }
         }
