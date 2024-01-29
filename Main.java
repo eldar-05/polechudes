@@ -34,21 +34,33 @@ public class Main
         int maximumScore = getMaxPossibleScore(wordChoosed(randomIndexOfWord));  //max score calculator
         clear();
         while (isGameRunning){
+            int countingFailedPlayers = 0;
+            int lastPlayer = -1;
             for(int k = 0; k < howManyPlayers; k++){
                 for(int i = 0; i < howManyPlayers; i++){
-                    if(scoresOfPlayers[i] > maximumScore / 2){
-                        doesFinalGameStart = true;
-                        winnerName = namesOfPlayers[k];
-                        isGameRunning = false;
-                        break;
+                    if(scoresOfPlayers[i] == -1){
+                        countingFailedPlayers++;
+                    }
+                    else{
+                        lastPlayer = i;
                     }
                 }
-                if(doesFinalGameStart){
+                if(countingFailedPlayers == howManyPlayers - 2){
                     break;
                 }
                 clear();
                 if(scoresOfPlayers[k] == -1){
                     continue;
+                }
+                for(int i = 0; i < howManyPlayers; i++){
+                    if(scoresOfPlayers[i] > maximumScore / 2){
+                        doesFinalGameStart = true;
+                        winnerName = namesOfPlayers[k];
+                        break;
+                    }
+                }
+                if(doesFinalGameStart){
+                    break;
                 }
                 System.out.println("Hint: " + wordsMeanigsChoosed(randomIndexOfWord));
                 for (int i = 0; i < howManyPlayers; i++){
@@ -94,6 +106,12 @@ public class Main
                         scoresOfPlayers[k] = -1;
                     }
                 }
+            }
+            if(countingFailedPlayers == howManyPlayers - 1){
+                winnerName = namesOfPlayers[lastPlayer];
+                scoresOfPlayers[lastPlayer] = maximumScore;
+                doesFinalGameStart = false;
+                break;
             }
         }
         clear();
