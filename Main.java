@@ -35,6 +35,7 @@ public class Main
         clear();
         while (isGameRunning){
             for(int k = 0; k < howManyPlayers; k++){
+                boolean allCharsFinded = false;
                 clear();
                 if(scoresOfPlayers[k] == -1){
                     continue;
@@ -78,6 +79,21 @@ public class Main
                     if(giveScore){
                         scoresOfPlayers[k] = scoresOfPlayers[k] + 100;
                         k--;
+                    }
+                    int charsFinded = 0;
+                    for(int i = 0; i < secretWord.length(); i++){
+                        if(charSlots[i] == 1){
+                            charsFinded++;
+                        }
+                    }
+                    if(charsFinded >= secretWord.length()){
+                        for(int i = 0; i < howManyPlayers - 1; i++){
+                            if(scoresOfPlayers[i] < scoresOfPlayers[i + 1]){
+                                winnerName = namesOfPlayers[i + 1];
+                            }
+                        }
+                        isGameRunning = false;
+                        break;
                     }
                 }
                 else{
@@ -138,8 +154,12 @@ public class Main
             }
         }
         for(int i = 0; i < howManyPlayers; i++){
-            if(scoresOfPlayers[i] == maximumScore || winnerName.equals(namesOfPlayers[i])){
-                System.out.println(namesOfPlayers[i] + " is winner " + maximumScore);
+            if(scoresOfPlayers[i] == maximumScore || namesOfPlayers[i].equals(winnerName)){
+                for(int j = 0; j < howManyPlayers; j++){
+                    scoresOfPlayers[j] = -1;
+                }
+                System.out.println(namesOfPlayers[i] + " is winner. Congrats!!!");
+                System.out.println("The secret word was " + secretWord);
             }
         }
     }
@@ -154,7 +174,7 @@ public class Main
     public static void clear(){
         System.out.print("\033[H\033[2J"); 
     }
-    public static int getMaxPossibleScore(String word){
+    public static int getMaxPossibleScore(String word){ //counting maximumScore
         int max = 1;
         String uniq = "" + word.charAt(0);
         for (int i = 1; i < word.length(); i++) {
