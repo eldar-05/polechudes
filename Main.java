@@ -51,22 +51,22 @@ public class Main {
                     isGameActive = false;
                     break;
                 }
-                System.out.println("Hint: " + chooseWordMeaning(randomWordIndex));
+                System.out.println("\u001B[91mHint: \u001B[0m" + chooseWordMeaning(randomWordIndex));
                 for (int i = 0; i < numberOfPlayers; i++) {
                     if (playerScores[i] > -1) {
-                        System.out.println("Player: " + playerNames[i] + " " + playerScores[i] + " points");
+                        System.out.println("Player: " + playerNames[i] + " \u001B[33m" + playerScores[i] + "\u001B[0m points");
                     }
                 }
                 System.out.println();
                 for (int i = 0; i < secretWord.length(); i++) {
                     if (charSlots[i] == 0) {
-                        System.out.print("[*]");
+                        System.out.print("[*] ");
                     }
                     else {
-                        System.out.print("[" + secretWord.charAt(i) + "]");
+                        System.out.print("[" + "\u001B[92m" + secretWord.charAt(i) + "\u001B[0m" + "] ");
                     }
                 }
-                System.out.println("\n" + playerNames[currentPlayerIndex] + " is guessing...");
+                System.out.println("\n" + "\u001B[33m>>>>>>>>>>>  \u001B[0m" + "\u001B[36m" + playerNames[currentPlayerIndex] + "\u001B[0m" + "\u001B[33m  <<<<<<<<<<<\u001B[0m");
                 System.out.print("Write letter or word: ");
                 String guessing = inputScanner.nextLine();
                 if (guessing.length() == 1) {
@@ -130,16 +130,18 @@ public class Main {
         if (isFinalGameStarted) {
             for (int i = 0; i < numberOfPlayers; i++) {
                 if (playerScores[i] > -1 && !(playerNames[i]).equals(winnerName)) {
-                    System.out.println("Hint: " + chooseWordMeaning(randomWordIndex) + " " + winnerName);
+                    System.out.println("\u001B[91mHint: \u001B[0m" + chooseWordMeaning(randomWordIndex));
                     for (int j = 0; j < secretWord.length(); j++) {
                         if (charSlots[j] == 0) {
-                            System.out.print("[*]");
+                            System.out.print("[*] ");
                         }
                         else {
-                            System.out.print("[" + secretWord.charAt(j) + "]");
+                            System.out.print("[\u001B[92m" + secretWord.charAt(j) + "\u001B[0m] ");
                         }
                     }
-                    System.out.print("\n" + playerNames[i] + " is guessing full word: ");
+                    System.out.print("\n \n" + "\u001B[33m>>>>> \u001B[0m" + "\u001B[31m" + "G U E S S   T H E   F U L L   W O R D" + "\u001B[0m" + "\u001B[33m <<<<<\u001B[0m");
+                    System.out.println("\n" + "\u001B[33m>>>>>>>>>>>  \u001B[0m" + "\u001B[36m" + playerNames[i] + "\u001B[0m" + "\u001B[33m  <<<<<<<<<<<\u001B[0m");
+                    System.out.print("\u001B[33m>>>>> \u001B[0m");
                     String fullWordGuessing = inputScanner.nextLine();
                     if (fullWordGuessing.equals(secretWord)) {
                         playerScores[i] = maxPossibleScore;
@@ -158,8 +160,8 @@ public class Main {
                 for (int j = 0; j < numberOfPlayers; j++) {
                     playerScores[j] = -1;
                 }
-                System.out.println(playerNames[i] + " is the winner. Congrats!!!");
-                System.out.println("The secret word was " + secretWord);
+                System.out.println("\u001B[94m" + playerNames[i] + "\u001B[0m" + " is the winner. Congrats!!!");
+                System.out.println("The secret word was: >> " + "\u001B[31m" + secretWord + "\u001B[0m <<");
             }
         }
     }
