@@ -8,11 +8,10 @@ public class Main
         Random random = new Random();
         boolean isGameRunning = true;
         boolean doesFinalGameStart = false;
-        boolean gameIsFinished = false;
         int randomIndexOfWord = random.nextInt(10);
         System.out.print("How many players? 2,3,4... ");
         int howManyPlayers = scanner.nextInt();
-        int winnerNumber = 0;
+        String winnerName = "";
         String[] namesOfPlayers = new String[howManyPlayers];
         int[] scoresOfPlayers = new int[howManyPlayers];   //score data
         String secretWord = wordChoosed(randomIndexOfWord);     //selected word
@@ -36,19 +35,20 @@ public class Main
         clear();
         while (isGameRunning){
             for(int k = 0; k < howManyPlayers; k++){
-                clear();
-                if(scoresOfPlayers[k] == -1){
-                    continue;
-                }
                 for(int i = 0; i < howManyPlayers; i++){
                     if(scoresOfPlayers[i] > maximumScore / 2){
                         doesFinalGameStart = true;
-                        gameIsFinished = true;
-                        winnerNumber = k;
+                        winnerName = namesOfPlayers[k];
+                        isGameRunning = false;
+                        break;
                     }
                 }
                 if(doesFinalGameStart){
                     break;
+                }
+                clear();
+                if(scoresOfPlayers[k] == -1){
+                    continue;
                 }
                 System.out.println("Hint: " + wordsMeanigsChoosed(randomIndexOfWord));
                 for (int i = 0; i < howManyPlayers; i++){
@@ -97,22 +97,34 @@ public class Main
             }
         }
         clear();
-        scanner.nextLine();
-        if(doesFinalGameStart && gameIsFinished){
+        if(doesFinalGameStart){     // if some one make more than 50% of maximumScore
             for(int i = 0; i < howManyPlayers; i++){
-                if(scoresOfPlayers[i] > -1 && scoresOfPlayers[i] != winnerNumber){
-                    System.out.print(namesOfPlayers[i] + " is guessing full word: ");
+                if(scoresOfPlayers[i] > -1 && !(namesOfPlayers[i]).equals(winnerName)){
+                    System.out.println("Hint: " + wordsMeanigsChoosed(randomIndexOfWord) + " " + winnerName);
+                    for(int j = 0; j < secretWord.length(); j++){
+                        if(charSlots[j] == 0){
+                            System.out.print("[" + "*" +"]");
+                        }
+                        else{
+                        System.out.print("[" + secretWord.charAt(j) +"]");
+                        }
+                    }
+                    System.out.print("\n" + namesOfPlayers[i] + " is guessing full word: ");
                     String fullWordGuessing = scanner.nextLine();
                     if(fullWordGuessing.equals(secretWord)){
                         scoresOfPlayers[i] = maximumScore;
-                        winnerNumber = i;
+                        winnerName = namesOfPlayers[i];
                         break;
                     }
+                    else{
+                        scoresOfPlayers[i] = -1;
+                    }
+                    clear();
                 }
             }
         }
         for(int i = 0; i < howManyPlayers; i++){
-            if(scoresOfPlayers[i] == maximumScore && winnerNumber == i){
+            if(scoresOfPlayers[i] == maximumScore || winnerName.equals(namesOfPlayers[i])){
                 System.out.println(namesOfPlayers[i] + " is winner " + maximumScore);
             }
         }
